@@ -1,0 +1,170 @@
+/*!th*/
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+    font-weight: normal;
+}
+
+.hero-content{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0px 0px;
+}
+
+.hero-bg {
+    font-family: "Source Sans Pro", Arial, sans-serif;
+    overflow:hidden;
+    position:relative;
+    margin:0;
+    text-align:center;
+    font-size: 16px;
+    box-sizing: border-box;
+
+    *, *:before, *:after {
+        box-sizing: inherit;
+    }
+
+
+
+    .title{
+        color:rgba(255,255,255,.8);
+        font-weight:300;
+    }
+
+    .background-image{
+        position:absolute;
+        top:50%;
+        left:0;
+        right:0;
+        bottom:0;
+        width:100%;
+        height:100%;
+        transform:translateY(-50%);
+    }
+    
+    .hero-text{
+        margin:0px 0px;
+        max-width:65%;
+        padding:0px 30px;
+        position: relative;
+    }
+
+    .hero-image{
+        position:relative;
+        align-self:flex-end;
+        height:80%;
+        display:flex;
+
+        img {
+            align-self:center;
+            max-height:100%;
+            max-width:100%;
+            padding:0 50px;
+        }
+    }
+
+}
+
+.oswald {
+    font-family: 'Oswald', sans-serif;
+}
+.pacifico {
+    font-family: 'Pacifico', cursive;
+}
+.playfair {
+    font-family: 'Playfair Display', serif;
+}
+.roboto {
+    font-family: 'Roboto Slab', serif;
+}
+.dosis {
+    font-family: 'Dosis', sans-serif;
+}
+.ubuntu {
+    font-family: 'Ubuntu', sans-serif;
+}
+.indieflower{
+    font-family: 'Indie Flower', cursive;
+}
+.abril {
+    font-family: 'Abril Fatface', cursive;
+}
+.satisfy {
+    font-family: 'Satisfy', cursive;
+}
+.quicksand {
+    font-family: 'Quicksand', sans-serif;
+}
+
+.anton {
+    font-family: 'Anton', sans-serif;
+}
+.bree {
+    font-family: 'Bree Serif', serif;
+}
+.alegreya {
+    font-family: 'Alegreya Sans', sans-serif;
+}
+
+.neon {
+    font-family: 'neon_tubesregular', sans-serif;
+}
+
+
+.hero-bg { 
+    .hero-btn {
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        -ms-flex-align: center;
+        align-items: center;
+        border: none;
+        border-radius: 3px;
+        box-shadow: none;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        font-size: 1em;
+        height: 2.25em;
+        -ms-flex-pack: start;
+        justify-content: flex-start;
+        line-height: 1.25;
+        padding-left: .625em;
+        padding-right: .625em;
+        position: relative;
+        vertical-align: top;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-color: rgba(255,255,255,1);
+        //border: 1px solid #dbdbdb;
+        color: rgba(0,0,0,.9);
+        cursor: pointer;
+        -ms-flex-pack: center;
+        justify-content: center;
+        padding: .5em .75em;
+        text-align: center;
+        white-space: nowrap;
+        opacity:.75;
+    }
+
+    .hero-btn.is-disabled, .button[disabled] {
+        opacity: .5;
+    }
+    .hero-btn.is-large {
+        font-size: 1.5rem;
+    }
+    .hero-btn.is-disabled, .button[disabled] {
+        pointer-events: none;
+    }
+    .hero-btn {
+        margin-bottom: 0;
+    }
+
+    .hero-btn.is-large {
+        height: 2.75em;
+        padding: .5em 1.5em .65em;
+    }
+}
+/*!end*/
