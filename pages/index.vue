@@ -199,9 +199,7 @@
         </div>
       </div>
     </div>
-
     <canvas id="canvas" style="display:none;" />
-    
   </div>
 </template>
 <script>
@@ -224,8 +222,13 @@ export default {
       selectedPhoto: [],
       defaultPhoto: 'https://jmperezperez.com/assets/images/posts/fecolormatrix-kanye-west.jpg',
       activeTab: 'colors',
-      colorOne: [240, 14, 46],
-      colorTwo: [0, 0, 0],
+      selectedPhoto: {
+        url: 'https://img.glyphs.co/img/?q=85&src=aHR0cDovL3MzLmdseXBocy5jby9zdG9jay9waG90by0xNDQ5NDgwODgxMzkyLTcxNmQwZWEyNGE0Ny5qcGc=',
+        urlMedium: 'https://img.glyphs.co/img/?w=1200&q=75&src=aHR0cDovL3MzLmdseXBocy5jby9zdG9jay9waG90by0xNDQ5NDgwODgxMzkyLTcxNmQwZWEyNGE0Ny5qcGc=',
+        urlSmall: 'https://img.glyphs.co/img/?w=400&h=250&crop=true&enlarge=true&q=70&src=aHR0cDovL3MzLmdseXBocy5jby9zdG9jay9waG90by0xNDQ5NDgwODgxMzkyLTcxNmQwZWEyNGE0Ny5qcGc='
+      },
+      colorOne: [251, 240, 25],
+      colorTwo: [1, 171, 109],
       colors: [
         {
           name: 'Forrest',

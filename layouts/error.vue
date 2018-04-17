@@ -9,7 +9,6 @@
               <h2 class="subtitle is-2">{{ error.message }}</h2>
             </div>
             <div class="column is-one-third">
-              <img style="float:right; width:auto;height:auto;max-width:100vw;" src="https://medialoot.com/assets/img/site/pencil-hi.png" >
             </div>
           </div>
         </div>
