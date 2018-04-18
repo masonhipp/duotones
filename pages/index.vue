@@ -3,8 +3,9 @@
     <div class="column is-3 controls">
       <div class="brand">
         <div class="logo">
-          <span class="circle one" />
-          <span class="circle two" />
+          
+          <span class="circle two" :style="{ backgroundColor: toHex(colorOne)}"/>
+          <span class="circle one" :style="{ backgroundColor: toHex(colorTwo)}"/>
         </div>
         <h1>duotone</h1>
         <p>Pairings & Effect Generator</p>
@@ -61,9 +62,8 @@
         </div> <!-- end colors -->
 
         <div v-if="activeTab === 'image'" class="photos tab-content pretty-scroll">
-          <div class="field is-grouped">
-            <input v-model="query" type="text" placeholder="Search photos..." class="photo-input">
-            <div class="file">
+                    <div class="field is-fullwidth">
+            <div class="file is-outline">
               <label class="file-label">
                 <input class="file-input" type="file" name="resume" @change="uploadImage">
                 <span class="file-cta">
@@ -77,6 +77,10 @@
               </label>
             </div>
           </div>
+          <div class="field">
+            <input v-model="query" type="text" placeholder="Search photos..." class="photo-input">
+          </div>
+
           <div class="photo-grid">
             <div v-for="photo in photos" :key="photo.filename" @click="togglePhoto(photo)" class="photo">
               <img :src="photo.urlSmall">
@@ -102,7 +106,7 @@
     
 
     <div class="column main-image">
-      <div class="img-wrap" :style="{'background-color': toRGB(colorOne)}">
+      <div class="img-wrap" :class="{'is-transition': !showTransition}" :style="{'background-color': toRGB(colorOne)}">
         <div v-if="loading" class="img-loader">Loading...</div>
         <div v-if="loading" class="loader-drop" />
         <div class="social-share" >
@@ -149,6 +153,11 @@
           </defs>
           <image v-bind="{'xlink:href': imageData}" :width="imgWidth" :height="imgHeight" filter="url(#duotone-filter)" preserveAspectRatio="xMidYMid slice"/>
         </svg>
+
+
+        <div class="jpg-wrapper" :class="{transition: !showTransition}"><img id="jpg-container" :width="imgWidth" :height="imgHeight"/></div>
+
+
         <svg id="duotone-effect" width="0" height="0" style="display:none">
           <defs>
             <filter id="duotone-filter">
@@ -197,6 +206,7 @@
             </a>
           </div>
         </div>
+        <div class="img-transition" :class="{hidden: !showTransition}" :style="{'background-color': toRGB(colorOne)}"> </div>
       </div>
     </div>
     <canvas id="canvas" style="display:none;" />
@@ -219,6 +229,7 @@ export default {
       imgWidth: 1024,
       imgHeight: 640,
       imageData: '',
+      showTransition: false,
       selectedPhoto: [],
       defaultPhoto: 'https://jmperezperez.com/assets/images/posts/fecolormatrix-kanye-west.jpg',
       activeTab: 'colors',
@@ -293,7 +304,7 @@ export default {
       if(val !== undefined){
         this.getPhotos(val)
       }
-    }, 300)
+    }, 200)
   },
   mounted (){
     this.getPhotos()
@@ -327,10 +338,18 @@ export default {
       this.activeTab = tab
     },
     changeColor(color){
+      this.showTransition = true
+
+      setTimeout(() => {
+        this.showTransition = false
+      }, 16)
+
       this.colorOne = color.one
       this.colorTwo = color.two
 
-      this.svgToPng()
+      this.$nextTick(() => {
+        this.svgToPng()
+      })
     },
     toRGB(color) {
       return 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')'
@@ -345,7 +364,9 @@ export default {
       let reader  = new FileReader();
       reader.addEventListener("load", () => {
         this.imageData = reader.result
-        this.svgToPng()
+        this.$nextTick(() => {
+          this.svgToPng()
+        })
       }, false);
 
       if (file) {
@@ -368,7 +389,9 @@ export default {
       ctx.drawImage(img, 0, 0)
       dataURL = canvas.toDataURL('image/jpeg')
       this.imageData = dataURL
-      this.svgToPng()
+      this.$nextTick(() => {
+        this.svgToPng()
+      })
     },
     svgToPng(){
       var svgString = new XMLSerializer().serializeToString(document.getElementById('duotone'));
@@ -383,12 +406,17 @@ export default {
       img.onload = () => {
           ctx.drawImage(img, 0, 0);
           let jpg = canvas.toDataURL("image/jpeg")
+          setTimeout(() => {
+            document.getElementById('jpg-container').src = jpg
+          }, 650)
 
           this.loading = false
+
           if (this.downloading) {
             var link = document.createElement("a");
-            link.download = name;
-            link.href = jpg;
+            link.download = name
+            link.href = jpg
+            
             link.click();
             this.downloading = false
           }
@@ -429,6 +457,13 @@ export default {
     height: calc(100% - 100px);
     margin:50px;
     position:relative;
+    // filter: grayscale(100%);
+    // transition: filter .32s ease;
+    
+
+    &.is-transition {
+      // filter:grayscale(0%);
+    }
 
     &:hover, &:active, &:focus{
       svg{
@@ -536,27 +571,30 @@ export default {
 
 .hex {
   position: absolute;
-  font-weight:1000;
+  font-weight:900;
   font-size:56px;
-  letter-spacing:-6px;
+  letter-spacing:-2px;
   z-index:10;
   height: 56px;
   display: block;
   line-height: 40px;
   max-height: 40px;
   text-transform: uppercase;
+  transition: color .64s ease;
 
   &.top {
     top:0px;
-    right:3.5px;
-    transform: translateY(-46px);
+    right:-12px;
+    text-align:right;
+    transform:scaleX(.9) translateY(-45px);
   }
 
   &.bottom {
     bottom: 0px;
-    left:0px;
-    transform: translateY(108%);
-    text-shadow: 0px 4px 25px rgba(100,100,100,.5);
+    left:-14px;
+    filter: brightness(1.2);
+    transform:scaleX(.9) translateY(45px);
+    //text-shadow: 0px 2px 1px rgba(255,255,255,.9);
   }
 }
 
@@ -565,9 +603,13 @@ export default {
   padding:20px;
 
   input {
-    width:99%;
+    width:100%;
     padding:10px 20px;
-    margin-right:1%;
+    //margin-top:10px;
+    //margin-right:10px;
+    background-color: #00000038;
+    border: none;
+    color:#ddd;
   }
 
   .photo-grid {
@@ -577,7 +619,7 @@ export default {
     align-items: center;
     margin-right: -9px;
     padding-right:4px;
-    margin-top:20px;
+    margin-top:10px;
     height: calc(100vh - 415px);
     overflow-y: scroll;
 
@@ -636,6 +678,9 @@ export default {
 
   h1{
     font-size:2em;
+    font-weight:900;
+    transform:scaleX(.9);
+
   }
 
   p{
@@ -646,10 +691,10 @@ export default {
 
   .logo {
     position: relative;
-    width:75px;
+    width:65px;
     padding:6% 0%;
-    margin:0px auto 5px;
-    transform: rotate(-45deg);
+    margin:0px auto 0px;
+    transform: rotate(-35deg);
 
 
     .circle{
@@ -657,12 +702,15 @@ export default {
       padding:30% 0%;
       border-radius:50%;
       position: absolute;
-      opacity:.5;
+      opacity:.8;
+      filter: brightness(1.5);
       background-color:white;
       top:0;
+      transition: background-color .64s ease;
 
       &.one{
         left:0;
+        opacity: .7;
       }
 
       &.two{
@@ -673,10 +721,11 @@ export default {
 }
 
 .tab-content {
-  border:2px solid rgba(255,255,255,.7);
+  //border:2px solid rgba(255,255,255,.7);
   border-top:0px;
   padding:15px;
   position:relative;
+  background: linear-gradient(to top, #333, #3c3c3c);
 
   &:after {
     content: '';
@@ -685,7 +734,7 @@ export default {
     left:0;
     right:0;
     height:80px;
-    background: linear-gradient(to bottom, rgba(0,0,0,0) 0% , #333 50%);
+    // background: linear-gradient(to bottom, rgba(0,0,0,0) 0% , #444 50%);
   }
 }
 .settings-tab{
@@ -713,8 +762,10 @@ export default {
   .page-icon {
     width:50%;
     height:70px;
-    border:2px solid rgba(255,255,255,.7);
+    // border:2px solid rgba(255,255,255,.7);
     //border-radius: 50%;
+    box-shadow: inset 0px -2px 4px rgba(0,0,0,.1);
+    background-color:#3a3a3a;
     padding:17px;
     cursor:pointer;
 
@@ -728,7 +779,9 @@ export default {
     }
 
     &.is-active{
-      background:linear-gradient(to bottom right, rgba(255,255,255,.2), rgba(255,255,255,.05));
+      background:linear-gradient(to bottom, #4a4a4a, #3c3c3c);
+          box-shadow: inset 0px 2px 4px rgba(0,0,0,.1);
+
     }
 
     svg{
@@ -845,6 +898,7 @@ export default {
     display:inline-block;
     text-align:center;
     padding-top:2px;
+    transition:background-color .64s ease;
     
     .fa{
       pointer-events: none;
@@ -885,6 +939,72 @@ export default {
     text-decoration:none;
     font-weight:bold;
 
+  }
+}
+
+.img-transition {
+  width:100%;
+  height:100%;
+  position:absolute;
+  margin:0 auto;
+  top:50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  filter: brightness(.6);
+
+  &.hidden {
+    opacity: 0;
+    width:100%;
+    height: 100%;
+    transition: all .64s ease-out;
+  }
+}
+
+.file-input{
+  opacity:0;
+}
+
+.file-label{
+  width:100%;
+
+  &:hover .file-cta{
+    background-color:#777;
+    color:#fff;
+  }
+
+  .file-cta{
+    background-color:#555;
+    border:2px solid #777;
+    border-radius:2px;
+    width:100%;
+    color:#ccc;
+  }
+}
+
+.jpg-wrapper {
+  position:absolute;
+  top:50%;
+  margin: 0 auto;
+  transform:translateY(-50%);
+  overflow:hidden;
+  border-radius: 0px;
+  width:100%;
+  height:100%;
+
+  &.transition {
+    img {
+      opacity:0;
+      transition: opacity .64s ease;
+    }
+  }
+
+  img {
+    position:absolute;
+    top:0;
+    left:0;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
   }
 }
 </style>
