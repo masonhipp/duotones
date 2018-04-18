@@ -1,6 +1,5 @@
 <template>
   <div class="columns">
-    <script src="reimg.js"></script>
     <div class="column is-3 controls">
       <div class="brand">
         <div class="logo">
@@ -91,10 +90,10 @@
 
         <div v-if="activeTab === 'settings'" class="settings-tab tab-content pretty-scroll">
           <p>contrast</p>
-          <input v-model="contrast" class="slider is-fullwidth is-dark is-large is-circle" step=".1" min=".1" max="3" value="1" type="range">
+          <input v-model="contrast" class="slider is-fullwidth is-black is-large is-circle" step=".1" min=".1" max="3" value="1" type="range">
 
           <p>brightness</p>
-          <input v-model="brightness" class="slider is-fullwidth is-dark is-large is-circle" step=".1" min=".1" max="3" value="1" type="range">
+          <input v-model="brightness" class="slider is-fullwidth is-black is-large is-circle" step=".1" min=".1" max="3" value="1" type="range">
 
 
         </div>
@@ -440,6 +439,7 @@ export default {
   flex-grow:.9;
   padding:0 0 40px 40px;
   height:90vh;
+  min-width: 330px;
 }
 .main-image {
   height: calc(100vh - 20px);
@@ -733,6 +733,7 @@ export default {
 
   &:after {
     content: '';
+    display: none;
     position:absolute;
     bottom:0px;
     left:0;
@@ -756,6 +757,8 @@ export default {
   input.slider {
     margin-bottom:20px;
     margin-top:10px;
+
+    opacity:.7;
   }
 
 }
@@ -807,6 +810,7 @@ export default {
 
   ::-webkit-scrollbar {
     width: 5px;
+    height:8px;
     //background-color: rgba(150,150,150,.1);
   }
 
@@ -1009,6 +1013,139 @@ export default {
     object-fit: cover;
     width: 100%;
     height: 100%;
+  }
+}
+
+@media screen and (max-width: 769px) {
+  html, body{
+    overflow:hidden;
+  }
+  .main-image{
+    max-width:100%;
+    margin-bottom:260px;
+    justify-content: flex-start;
+
+    .img-wrap{
+      margin:30px;
+      width:calc(100% - 60px);
+    }
+  }
+
+  .columns {
+    display:flex;
+    flex-direction: column-reverse;
+    padding-top:130px;
+    height: calc(100vh);
+
+    .column{
+      flex-basis:auto;
+    }
+  }
+
+  .controls {
+    padding:0px;
+    width:calc(100vw - 20px);
+    height: 220px;
+    position:fixed;
+    bottom:10px;
+
+    .controls-content {
+      height:160px;
+    }
+
+  }
+
+  .swatches{
+    flex-wrap:nowrap;
+    overflow-x:scroll;
+    overflow-y:hidden;
+    justify-content: flex-start;
+    height:135px;
+    padding-bottom:5px;
+
+    .swatch{
+      display:inline-block;
+      width:70px;
+      // height:70px;
+      margin-right:50px;
+      text-align:center;
+      line-height:1em;
+      margin-bottom:0px;
+
+      .colors{
+        height:50px;
+        width:50px;
+        padding:0;
+        margin: 0 auto;
+
+      }
+    }
+  }
+
+  .photos {
+    height: 160px;
+    .field.is-fullwidth{
+      width:30%;
+      margin-right:0%;
+    }
+
+    .field {
+      width:68%;
+      margin-right:2%;
+      float:right;
+      margin-bottom:9px;
+    }
+
+    .photo-grid{
+      margin:0;
+      padding-bottom:5px;
+      flex-wrap:nowrap;
+      flex-direction: row;
+      height:90px;
+      overflow-x:auto;
+      overflow-y:hidden;
+
+      .photo {
+        display:inline-block;
+        width: 135px;
+        margin-right:10px;
+        flex-basis:auto;
+        flex-grow:0;
+        flex-shrink:0;
+      }
+    }
+  }
+
+  .settings-tab{
+    height: 160px;
+    min-height:0px;
+
+    p {
+      margin-top:3px;
+    }
+
+    input.slider {
+      margin-top:8px;
+      margin-bottom:15px;
+    }
+  }
+
+  .brand{
+    padding: 0;
+    position:fixed;
+    top:35px;
+    margin:0 auto;
+    width:100%;
+    text-align:center;
+
+    p {
+      display:none;
+    }
+
+    .logo {
+      padding: 15px;
+      width:55px;
+    }
   }
 }
 </style>
