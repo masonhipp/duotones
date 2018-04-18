@@ -128,7 +128,7 @@
         
         <p class="attribution"><a href="https://medialoot.com"><span>powered by</span> Medialoot</a></p>
 
-        <svg id="duotone" :viewBox="'0 0 '+ imgWidth + ' ' + imgHeight" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+        <svg id="duotone" :viewBox="'0 0 '+ imgWidth + ' ' + imgHeight" :width="imgWidth" :height="imgHeight" preserveAspectRatio="xMidYMid slice">
           <defs>
 
             <filter id="duotone-filter">
@@ -206,10 +206,10 @@
             </a>
           </div>
         </div>
-        <div class="img-transition" :class="{hidden: !showTransition}" :style="{'background-color': toRGB(colorOne)}"> </div>
       </div>
     </div>
     <canvas id="canvas" style="display:none;" />
+    <a id="download-link" src="" download="duotone.jpg" style="display:none"/>
   </div>
 </template>
 <script>
@@ -395,7 +395,7 @@ export default {
     },
     svgToPng(){
       var svgString = new XMLSerializer().serializeToString(document.getElementById('duotone'));
-      var canvas = document.getElementById("canvas");
+      var canvas = document.getElementById("canvas")
       var ctx = canvas.getContext("2d");
       canvas.height = this.imgHeight
       canvas.width = this.imgWidth
@@ -413,11 +413,9 @@ export default {
           this.loading = false
 
           if (this.downloading) {
-            var link = document.createElement("a");
-            link.download = name
+            var link = document.getElementById("download-link")
             link.href = jpg
-            
-            link.click();
+            link.click()
             this.downloading = false
           }
           DOMURL.revokeObjectURL(jpg)
@@ -449,6 +447,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  max-width:75%;
 
   .img-wrap{
     top:0%;
@@ -549,10 +548,14 @@ export default {
 
     &.one{
       top: 0;
+      border-top-right-radius:300px;
+      border-top-left-radius:300px;
     }
 
     &.two{
       bottom:0;
+      border-bottom-left-radius:300px;
+      border-bottom-right-radius:300px;
     }
 
     span {
