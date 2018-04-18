@@ -1,5 +1,6 @@
 <template>
   <div class="columns">
+    <script src="reimg.js"></script>
     <div class="column is-3 controls">
       <div class="brand">
         <div class="logo">
@@ -394,16 +395,17 @@ export default {
       })
     },
     svgToPng(){
+      console.log('starting svg to png')
       var svgString = new XMLSerializer().serializeToString(document.getElementById('duotone'));
+      var src = 'data:image/svg+xml;base64,' + window.btoa(svgString)
       var canvas = document.getElementById("canvas")
       var ctx = canvas.getContext("2d");
       canvas.height = this.imgHeight
       canvas.width = this.imgWidth
-      var DOMURL = self.URL || self.webkitURL || self;
-      var img = new Image();
-      var svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
-      var url = DOMURL.createObjectURL(svg);
+      var img = document.createElement('img')
+      // console.log('dom url: ',url)
       img.onload = () => {
+        console.log('svg2png image onload event')
           ctx.drawImage(img, 0, 0);
           let jpg = canvas.toDataURL("image/jpeg")
           setTimeout(() => {
@@ -418,9 +420,8 @@ export default {
             link.click()
             this.downloading = false
           }
-          DOMURL.revokeObjectURL(jpg)
       };
-      img.src = url;
+      img.src = src;
     }
   }
 }
