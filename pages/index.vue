@@ -1031,7 +1031,8 @@ export default {
     
     position:fixed;
     top:50px;
-    height: calc(100vh - 285px);
+    bottom:235px;
+    height:auto;
     max-width:calc(100% - 20px);
 
     .img-wrap{
@@ -1042,10 +1043,23 @@ export default {
 
   .columns {
     padding-top:40px;
-    height: calc(100vh);
+    position:absolute;
+    top:0px;
+    bottom:12px;
+    left:0px;
+    right:0px;
+    height: auto;
+    box-sizing: border-box;
 
     .column{
       flex-basis:auto;
+    }
+  }
+
+  .tab-switch{
+
+    .page-icon{
+      height:60px;
     }
   }
 
@@ -1073,6 +1087,7 @@ export default {
     height: 220px;
     position:fixed;
     bottom:10px;
+    //overflow:hidden;
     z-index:50;
 
     .controls-content {
@@ -1132,6 +1147,7 @@ export default {
       height:90px;
       overflow-x:auto;
       overflow-y:hidden;
+      width:100%;
 
       .photo {
         display:inline-block;
