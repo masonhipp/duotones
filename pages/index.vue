@@ -64,7 +64,7 @@
                     <div class="field is-fullwidth">
             <div class="file is-outline">
               <label class="file-label">
-                <input class="file-input" type="file" name="resume" @change="uploadImage">
+                <input class="file-input" type="file" name="resume" @change="uploadImage" accept="image/*">
                 <span class="file-cta">
                   <span class="file-icon">
                     <i class="fa fa-upload" />
@@ -126,7 +126,7 @@
             <i class="fa fa-facebook"/>
           </a>
         </div>
-        <p :style="{'color': toRGB(colorOne)}" class="hex top">{{ orientation }} - {{ toHex(colorOne) }}</p>
+        <p :style="{'color': toRGB(colorOne)}" class="hex top">{{ toHex(colorOne) }}</p>
         <p :style="{'color': toRGB(colorTwo)}" class="hex bottom">{{ toHex(colorTwo) }}</p>
         
         <p class="attribution"><a href="https://medialoot.com"><span>powered by</span> Medialoot</a></p>
@@ -154,7 +154,13 @@
                 color-interpolation-filters="sRGB" />  
             </filter>    
           </defs>
-          <image id="source-image" :transform="'rotate(' + rotation + ' ' + imgWidth/2 + ' ' + imgHeight/2 + ')'" v-bind="{'xlink:href': imageData}" :width="imgWidth" :height="imgHeight" filter="url(#duotone-filter)" preserveAspectRatio="xMidYMid slice"/>
+          <image id="source-image" x="50%" y="50%"
+                 :transform="'rotate(' + rotation + ' ' + imgWidth/2 + ' ' + imgHeight/2 + ')' + 'translate(-' + naturalWidth/2 + ' -' + naturalHeight/2 + ')'"
+                 v-bind="{'xlink:href': imageData}"
+                 :width="naturalWidth"
+                 :height="naturalHeight"
+                 filter="url(#duotone-filter)"
+                 preserveAspectRatio="xMidYMid slice"/>
         </svg>
 
 
@@ -233,6 +239,8 @@ export default {
       orientation: 1,
       contrast: 1, // contrast filter
       brightness: 1,
+      naturalWidth: 1024,
+      naturalHeight: 640,
       imgWidth: 1024,
       imgHeight: 640,
       imageData: '',
@@ -339,6 +347,8 @@ export default {
     },
     togglePhoto (hit) {
       this.loading = true
+      this.rotation = 0
+      this.orientation = 1
       this.userImage = false
       this.selectedPhoto = hit
     },
@@ -372,14 +382,16 @@ export default {
       this.userImage = true
       let file = event.target.files[0]
       let reader  = new FileReader();
-      reader.addEventListener("load", () => {
-        this.imageData = reader.result
+      reader.addEventListener("load", (event) => {
+        this.imageData = event.target.result
         let img = new Image()
         img.onload = () => {
           EXIF.getData(img, () => {
-            let orientation = img.exifdata.orientation
+            let orientation = img.exifdata.Orientation
             this.orientation = orientation
-            console.log('image orientation: ' + orientation)
+            console.log('image orientation: ',  img.exifdata)
+            this.naturalWidth = img.naturalWidth
+            this.naturalHeight = img.naturalHeight
 
             switch(orientation) {
               case 8:
@@ -398,9 +410,11 @@ export default {
                 this.imgHeight = img.naturalHeight
                 break
               default: 
+                this.rotation = 0
                 this.imgWidth = img.naturalWidth
                 this.imgHeight = img.naturalHeight
             }
+            
             this.$nextTick(() => {
               this.svgToPng()
             })
@@ -428,8 +442,8 @@ export default {
       var canvas = document.createElement('CANVAS')
       var ctx = canvas.getContext('2d')
       var dataURL
-      canvas.height = this.imgHeight = img.naturalHeight
-      canvas.width = this.imgWidth = img.naturalWidth
+      canvas.height = this.imgHeight = this.naturalHeight = img.naturalHeight
+      canvas.width = this.imgWidth = this.naturalWidth = img.naturalWidth
       ctx.drawImage(img, 0, 0)
       dataURL = canvas.toDataURL('image/jpeg')
       this.imageData = dataURL
