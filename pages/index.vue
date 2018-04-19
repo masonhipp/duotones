@@ -156,7 +156,6 @@
           </defs>
           <image id="source-image" x="50%" y="50%"
                  :transform="'rotate(' + rotation + ' ' + imgWidth/2 + ' ' + imgHeight/2 + ')' + 'translate(-' + naturalWidth/2 + ' -' + naturalHeight/2 + ')'"
-                 v-bind="{'xlink:href': imageData}"
                  :width="naturalWidth"
                  :height="naturalHeight"
                  filter="url(#duotone-filter)"
@@ -243,7 +242,6 @@ export default {
       naturalHeight: 640,
       imgWidth: 1024,
       imgHeight: 640,
-      imageData: '',
       showTransition: false,
       selectedPhoto: [],
       // defaultPhoto: 'https://jmperezperez.com/assets/images/posts/fecolormatrix-kanye-west.jpg',
@@ -372,6 +370,10 @@ export default {
     toRGB(color) {
       return 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')'
     },
+    setImageData(data) {
+      let image = document.getElementById('source-image')
+      image.setAttributeNS("http://www.w3.org/1999/xlink", 'xlink:href', data)
+    },
     toHex(color) {
       return '#' + color.reduce((acc, val) => {
         return acc + (val.toString(16).length > 1 ? val.toString(16) : '0' + val.toString(16))
@@ -381,9 +383,9 @@ export default {
       this.loading = true
       this.userImage = true
       let file = event.target.files[0]
-      let reader  = new FileReader();
+      let reader  = new FileReader()  
       reader.addEventListener("load", (event) => {
-        this.imageData = event.target.result
+        this.setImageData(event.target.result)
         let img = new Image()
         img.onload = () => {
           EXIF.getData(img, () => {
@@ -445,8 +447,8 @@ export default {
       canvas.height = this.imgHeight = this.naturalHeight = img.naturalHeight
       canvas.width = this.imgWidth = this.naturalWidth = img.naturalWidth
       ctx.drawImage(img, 0, 0)
-      dataURL = canvas.toDataURL('image/jpeg')
-      this.imageData = dataURL
+      dataURL = canvas.toDataURL('image/jpeg', .8)
+      this.setImageData(dataURL)
       this.$nextTick(() => {
         this.svgToPng()
       })
@@ -454,7 +456,7 @@ export default {
     svgToPng(){
       console.log('starting svg to png')
       var svgString = new XMLSerializer().serializeToString(document.getElementById('duotone'));
-      var src = 'data:image/svg+xml;base64,' + window.btoa(svgString)
+      var src = 'data:image/svg+xml;utf-8,' + svgString
       var canvas = document.getElementById("canvas")
       var ctx = canvas.getContext("2d");
       canvas.height = this.imgHeight
@@ -464,7 +466,7 @@ export default {
       img.onload = () => {
         console.log('svg2png image onload event')
           ctx.drawImage(img, 0, 0);
-          let jpg = canvas.toDataURL("image/jpeg")
+          let jpg = canvas.toDataURL("image/jpeg", .8)
           setTimeout(() => {
             document.getElementById('jpg-container').src = jpg
           }, 650)
