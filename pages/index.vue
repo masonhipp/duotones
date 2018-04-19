@@ -1206,12 +1206,13 @@ export default {
     }
 
     .logo {
-      padding: 10px;
+      padding: 0px;
       width:40px;
+      height:40px;
       position: absolute;
       left:0px;
-      top:5px;
-      margin:0;
+      top:2px;
+      margin:0 0 0 7px;
       transform:rotate(-60deg);
       //margin: 0px 10px;
     }
