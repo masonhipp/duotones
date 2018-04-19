@@ -1034,6 +1034,7 @@ export default {
     bottom:235px;
     height:auto;
     max-width:calc(100% - 20px);
+    width: calc(100% - 20px);
 
     .img-wrap{
       margin:20px;
