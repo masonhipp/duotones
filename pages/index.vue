@@ -3,7 +3,6 @@
     <div class="column is-3 controls">
       <div class="brand">
         <div class="logo">
-          
           <span class="circle two" :style="{ backgroundColor: toHex(colorOne)}"/>
           <span class="circle one" :style="{ backgroundColor: toHex(colorTwo)}"/>
         </div>
@@ -110,6 +109,10 @@
         <div v-if="loading" class="img-loader">Loading...</div>
         <div v-if="loading" class="loader-drop" />
         <div class="social-share" >
+          <a class="icon download" :style="{backgroundColor: toHex(colorOne)}"
+             @click.prevent="downloadJpeg">
+            <img src="/download-icon.svg" />
+          </a>
           <a :style="{backgroundColor: toHex(colorOne)}" 
              href="https://twitter.com/intent/tweet?url=https://duotones.co&text=Duotone color pairings and effect generator – "
              class="icon"
@@ -189,14 +192,14 @@
               <span class="text">CSS</span>
             </p>
           </div> -->
-          <div class="field">
+          <!-- <div class="field">
             <p :style="{'background-color': toRGB(colorTwo)}" class="button download">
               <span class="icon">
                 <i class="fa fa-code" />
               </span>
               <span class="text">Copy Effect</span>
             </p>
-          </div>
+          </div>-->
           <div class="field">
             <a @click.prevent="downloadJpeg" :style="{'background-color': toRGB(colorTwo)}" :class="{'is-loading': downloading}" class="button download">
               <span class="icon">
@@ -590,14 +593,14 @@ export default {
     top:0px;
     right:-12px;
     text-align:right;
-    transform:scaleX(.9) translateY(-45px);
+    transform:scaleX(.9) translateY(-110%);
   }
 
   &.bottom {
     bottom: 0px;
     left:-14px;
     filter: brightness(1.2);
-    transform:scaleX(.9) translateY(45px);
+    transform:scaleX(.9) translateY(110%);
     //text-shadow: 0px 2px 1px rgba(255,255,255,.9);
   }
 }
@@ -907,6 +910,10 @@ export default {
     text-align:center;
     padding-top:2px;
     transition:background-color .64s ease;
+
+    &.download {
+      display:none;
+    }
     
     .fa{
       pointer-events: none;
@@ -1021,24 +1028,43 @@ export default {
     overflow:hidden;
   }
   .main-image{
+    
     max-width:100%;
-    margin-bottom:260px;
+    margin-bottom:230px;
     justify-content: flex-start;
 
     .img-wrap{
-      margin:30px;
-      width:calc(100% - 60px);
+      margin:20px;
+      width:calc(100% - 40px);
     }
   }
 
   .columns {
     display:flex;
     flex-direction: column-reverse;
-    padding-top:130px;
+    padding-top:40px;
     height: calc(100vh);
 
     .column{
       flex-basis:auto;
+    }
+  }
+
+  .hex{
+    font-size:30px;
+
+    &.top {
+      bottom: 0px;
+      left:-7px;
+      right:auto;
+      transform: scaleX(.9) translateY(85%);
+      top:auto;
+    }
+
+    &.bottom{
+      right:-4px;
+      left:auto;
+      transform: scaleX(.9) translateY(85%);
     }
   }
 
@@ -1048,6 +1074,7 @@ export default {
     height: 220px;
     position:fixed;
     bottom:10px;
+    z-index:50;
 
     .controls-content {
       height:160px;
@@ -1081,16 +1108,18 @@ export default {
       }
     }
   }
-
+  .attribution {
+    display:none;
+  }
   .photos {
     height: 160px;
     .field.is-fullwidth{
-      width:30%;
+      width:35%;
       margin-right:0%;
     }
 
     .field {
-      width:68%;
+      width:63%;
       margin-right:2%;
       float:right;
       margin-bottom:9px;
@@ -1107,11 +1136,18 @@ export default {
 
       .photo {
         display:inline-block;
-        width: 135px;
+        width: 90px;
+        height:65px;
         margin-right:10px;
         flex-basis:auto;
         flex-grow:0;
         flex-shrink:0;
+
+        img{
+          width:100%;
+          height:100%;
+          object-fit:cover;
+        }
       }
     }
   }
@@ -1130,21 +1166,54 @@ export default {
     }
   }
 
+  .social-share{
+    position:fixed;
+    top:32px;
+    right:22px;
+    left:auto;
+    text-align:right;
+    //width:200px;
+  }
+
+  .social-share{
+    .icon.download {
+      display:inline-block;
+
+      img{
+        width:24px;
+        height:24px;
+      }
+    }
+  }
+
   .brand{
     padding: 0;
     position:fixed;
-    top:35px;
+    top:33px;
+    left:24px;
     margin:0 auto;
-    width:100%;
+    width:200px;
     text-align:center;
 
     p {
       display:none;
     }
 
+    h1{
+      margin-left:-15px;
+      font-size:1.7em;
+      transform: scaleX(.85);
+    }
+
     .logo {
-      padding: 15px;
-      width:55px;
+      padding: 10px;
+      width:40px;
+      position: absolute;
+      left:0px;
+      top:5px;
+      margin:0;
+      transform:rotate(-60deg);
+      //margin: 0px 10px;
     }
   }
 }
