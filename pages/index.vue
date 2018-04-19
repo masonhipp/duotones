@@ -154,7 +154,7 @@
                 color-interpolation-filters="sRGB" />  
             </filter>    
           </defs>
-          <image v-bind="{'xlink:href': imageData}" :width="imgWidth" :height="imgHeight" filter="url(#duotone-filter)" preserveAspectRatio="xMidYMid slice"/>
+          <image id="source-image" v-bind="{'xlink:href': imageData}" :width="imgWidth" :height="imgHeight" filter="url(#duotone-filter)" preserveAspectRatio="xMidYMid slice"/>
         </svg>
 
 
@@ -371,10 +371,16 @@ export default {
       let reader  = new FileReader();
       reader.addEventListener("load", () => {
         this.imageData = reader.result
-        this.$nextTick(() => {
-          this.svgToPng()
-        })
-      }, false);
+        let img = new Image()
+        img.onload = () => {
+          this.imgWidth = img.naturalWidth
+          this.imgHeight = img.naturalHeight
+          this.$nextTick(() => {
+            this.svgToPng()
+          })
+        }
+        img.src = reader.result
+      }, false)
 
       if (file) {
         reader.readAsDataURL(file);
