@@ -1029,9 +1029,10 @@ export default {
   }
   .main-image{
     
-    max-width:100%;
-    margin-bottom:230px;
-    justify-content: flex-start;
+    position:fixed;
+    top:50px;
+    height: calc(100vh - 285px);
+    max-width:calc(100% - 20px);
 
     .img-wrap{
       margin:20px;
@@ -1040,8 +1041,6 @@ export default {
   }
 
   .columns {
-    display:flex;
-    flex-direction: column-reverse;
     padding-top:40px;
     height: calc(100vh);
 
@@ -1216,6 +1215,18 @@ export default {
       transform:rotate(-60deg);
       //margin: 0px 10px;
     }
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) and (orientation: landscape) {
+  html {
+    transform: rotate(-90deg);
+    transform-origin: left top;
+    width: 100vh;
+    overflow-x: hidden;
+    position: absolute;
+    top: 100%;
+    left: 0;
   }
 }
 </style>
