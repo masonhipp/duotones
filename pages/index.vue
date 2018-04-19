@@ -242,6 +242,8 @@ export default {
       naturalHeight: 640,
       imgWidth: 1024,
       imgHeight: 640,
+      canvasHeight: 1024,
+      canvasWidth: 640,
       showTransition: false,
       selectedPhoto: [],
       // defaultPhoto: 'https://jmperezperez.com/assets/images/posts/fecolormatrix-kanye-west.jpg',
@@ -444,8 +446,14 @@ export default {
       var canvas = document.createElement('CANVAS')
       var ctx = canvas.getContext('2d')
       var dataURL
-      canvas.height = this.imgHeight = this.naturalHeight = img.naturalHeight
-      canvas.width = this.imgWidth = this.naturalWidth = img.naturalWidth
+
+      let h = this.imgHeight = this.naturalHeight = img.naturalHeight
+      let w = this.imgWidth = this.naturalWidth = img.naturalWidth
+      let ratio = w/h
+
+      canvas.height = this.canvasHeight = h
+      canvas.width = this.canvasWidth = w
+
       ctx.drawImage(img, 0, 0)
       dataURL = canvas.toDataURL('image/jpeg', .8)
       this.setImageData(dataURL)
@@ -459,8 +467,22 @@ export default {
       var src = 'data:image/svg+xml;utf-8,' + svgString
       var canvas = document.getElementById("canvas")
       var ctx = canvas.getContext("2d");
-      canvas.height = this.imgHeight
-      canvas.width = this.imgWidth
+
+      let h = this.imgHeight
+      let w = this.imgWidth
+      let ratio = w/h
+
+      if (h > w) {
+        let h = 1200
+        let w = h*ratio
+      } else {
+        let w = 1200
+        let h = 1200/ratio
+      }
+
+      canvas.height = this.downloading ? this.imgHeight : h
+      canvas.width = this.downloading ? this.imgWidth : w
+
       var img = document.createElement('img')
       // console.log('dom url: ',url)
       img.onload = () => {
