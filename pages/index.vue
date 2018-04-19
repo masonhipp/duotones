@@ -126,7 +126,7 @@
             <i class="fa fa-facebook"/>
           </a>
         </div>
-        <p :style="{'color': toRGB(colorOne)}" class="hex top">{{ toHex(colorOne) }}</p>
+        <p :style="{'color': toRGB(colorOne)}" class="hex top">{{ orientation }} - {{ toHex(colorOne) }}</p>
         <p :style="{'color': toRGB(colorTwo)}" class="hex bottom">{{ toHex(colorTwo) }}</p>
         
         <p class="attribution"><a href="https://medialoot.com"><span>powered by</span> Medialoot</a></p>
@@ -230,6 +230,7 @@ export default {
       userImage: false,
       downloading:false,
       rotation: 0,
+      orientation: 1,
       contrast: 1, // contrast filter
       brightness: 1,
       imgWidth: 1024,
@@ -377,6 +378,7 @@ export default {
         img.onload = () => {
           EXIF.getData(img, () => {
             let orientation = img.exifdata.orientation || 1
+            this.orientation = orientation
             console.log('image orientation: ' + orientation)
 
             switch(orientation) {
