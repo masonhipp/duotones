@@ -126,7 +126,7 @@
             <i class="fa fa-facebook"/>
           </a>
         </div>
-        <p :style="{'color': toRGB(colorOne)}" class="hex top">{{ toHex(colorOne) }}</p>
+        <p :style="{'color': toRGB(colorOne)}" class="hex top">{{ orientation }} - {{ toHex(colorOne) }}</p>
         <p :style="{'color': toRGB(colorTwo)}" class="hex bottom">{{ toHex(colorTwo) }}</p>
         
         <p class="attribution"><a href="https://medialoot.com"><span>powered by</span> Medialoot</a></p>
@@ -154,7 +154,7 @@
                 color-interpolation-filters="sRGB" />  
             </filter>    
           </defs>
-          <image id="source-image" v-bind="{'xlink:href': imageData}" :width="imgWidth" :height="imgHeight" filter="url(#duotone-filter)" preserveAspectRatio="xMidYMid slice"/>
+          <image id="source-image" :transform="'rotate(' + rotation + ' ' + imgWidth/2 + ' ' + imgHeight/2 + ')'" v-bind="{'xlink:href': imageData}" :width="imgWidth" :height="imgHeight" filter="url(#duotone-filter)" preserveAspectRatio="xMidYMid slice"/>
         </svg>
 
 
@@ -216,6 +216,7 @@
   </div>
 </template>
 <script>
+var EXIF = require('exif-js')
 import debounce from 'lodash/debounce'
 import getPhotos from '~/services/photoSearch.js'
 
@@ -228,6 +229,8 @@ export default {
       loading:false,
       userImage: false,
       downloading:false,
+      rotation: 0,
+      orientation: 1,
       contrast: 1, // contrast filter
       brightness: 1,
       imgWidth: 1024,
@@ -373,11 +376,35 @@ export default {
         this.imageData = reader.result
         let img = new Image()
         img.onload = () => {
-          this.imgWidth = img.naturalWidth
-          this.imgHeight = img.naturalHeight
-          this.$nextTick(() => {
-            this.svgToPng()
-          })
+          EXIF.getData(img, () => {
+            let orientation = img.exifdata.orientation || 1
+            this.orientation = orientation
+            console.log('image orientation: ' + orientation)
+
+            switch(orientation) {
+              case 8:
+                this.rotation = 270
+                this.imgWidth = img.naturalHeight
+                this.imgHeight = img.naturalWidth
+                break
+              case 6:
+                this.rotation = 90
+                this.imgWidth = img.naturalHeight
+                this.imgHeight = img.naturalWidth
+                break
+              case 3: 
+                this.rotation = 180
+                this.imgWidth = img.naturalWidth
+                this.imgHeight = img.naturalHeight
+                break
+              default: 
+                this.imgWidth = img.naturalWidth
+                this.imgHeight = img.naturalHeight
+            }
+            this.$nextTick(() => {
+              this.svgToPng()
+            })
+          })          
         }
         img.src = reader.result
       }, false)
