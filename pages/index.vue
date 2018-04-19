@@ -377,7 +377,7 @@ export default {
         let img = new Image()
         img.onload = () => {
           EXIF.getData(img, () => {
-            let orientation = img.exifdata.orientation || 1
+            let orientation = img.exifdata.orientation
             this.orientation = orientation
             console.log('image orientation: ' + orientation)
 
