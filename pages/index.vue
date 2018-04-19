@@ -100,8 +100,8 @@
       </div>
     </div>
     
-    <img v-if="downloading" crossOrigin="Anonymous" id="download-container" :src="selectedPhoto.url" style="display:none;" @load="imageEvent">
-    <img crossOrigin="Anonymous" id="image-container" style="display:none;" :src="selectedPhoto.urlMedium || defaultPhoto" @load="imageEvent">
+    <img v-if="downloading && !userImage" crossOrigin="Anonymous" id="download-container" :src="selectedPhoto.url" style="display:none;" @load="imageEvent">
+    <img crossOrigin="Anonymous" id="image-container" style="display:none;" :src="selectedPhoto.urlMedium" @load="imageEvent">
     
 
     <div class="column main-image">
@@ -226,6 +226,7 @@ export default {
       photos: [],
       query: '',
       loading:false,
+      userImage: false,
       downloading:false,
       contrast: 1, // contrast filter
       brightness: 1,
@@ -234,7 +235,7 @@ export default {
       imageData: '',
       showTransition: false,
       selectedPhoto: [],
-      defaultPhoto: 'https://jmperezperez.com/assets/images/posts/fecolormatrix-kanye-west.jpg',
+      // defaultPhoto: 'https://jmperezperez.com/assets/images/posts/fecolormatrix-kanye-west.jpg',
       activeTab: 'colors',
       selectedPhoto: {
         url: 'https://img.glyphs.co/img/?q=85&src=aHR0cDovL3MzLmdseXBocy5jby9zdG9jay9waG90by0xNDQ5NDgwODgxMzkyLTcxNmQwZWEyNGE0Ny5qcGc=',
@@ -334,8 +335,9 @@ export default {
       }
     },
     togglePhoto (hit) {
-      this.loading = true;
-      this.selectedPhoto = this.selectedPhoto.filename === hit.filename ? [] : hit
+      this.loading = true
+      this.userImage = false
+      this.selectedPhoto = hit
     },
     setActiveTab(tab) {
       this.activeTab = tab
@@ -363,6 +365,8 @@ export default {
       }, '')
     },
     uploadImage(event) {
+      this.loading = true
+      this.userImage = true
       let file = event.target.files[0]
       let reader  = new FileReader();
       reader.addEventListener("load", () => {
@@ -378,6 +382,10 @@ export default {
     },
     downloadJpeg(){
       this.downloading = true
+
+      if (this.userImage) { 
+        this.svgToPng();
+      }
     },
     imageEvent(event) {
       this.loading = this.downloading ? this.loading :  true
@@ -1026,6 +1034,8 @@ export default {
 @media screen and (max-width: 769px) {
   html, body{
     overflow:hidden;
+    width:100%;
+    height:100%;
   }
   .main-image{
     
@@ -1049,6 +1059,7 @@ export default {
     bottom:12px;
     left:0px;
     right:0px;
+    overflow:hidden;
     height: auto;
     box-sizing: border-box;
 
