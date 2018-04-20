@@ -456,7 +456,6 @@ export default {
     },
     downloadJpeg(){
       this.downloading = true
-
       if (this.userImage) { 
         this.svgToPng();
       }
@@ -466,6 +465,7 @@ export default {
       this.getDataUri(event.target)
     },
     getDataUri(img) {
+      console.log('get data uri')
       var canvas = document.createElement('CANVAS')
       var ctx = canvas.getContext('2d')
       var dataURL
@@ -479,11 +479,13 @@ export default {
       ctx.drawImage(img, 0, 0)
       dataURL = canvas.toDataURL('image/jpeg', .8)
       this.setImageData(dataURL)
+
       this.$nextTick(() => {
         this.svgToPng()
       })
     },
     svgToPng(){
+      console.log('svg to png')
       var svgString = new XMLSerializer().serializeToString(document.getElementById('duotone'));
       var src = 'data:image/svg+xml;base64,' + window.btoa(svgString)
       var canvas = document.getElementById('canvas') // document.createElement('canvas')
