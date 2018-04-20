@@ -242,8 +242,6 @@ export default {
       naturalHeight: 640,
       imgWidth: 1024,
       imgHeight: 640,
-      canvasHeight: 1024,
-      canvasWidth: 640,
       showTransition: false,
       selectedPhoto: [],
       // defaultPhoto: 'https://jmperezperez.com/assets/images/posts/fecolormatrix-kanye-west.jpg',
@@ -346,6 +344,7 @@ export default {
       }
     },
     togglePhoto (hit) {
+      if(this.selectedPhoto === hit){return}
       this.loading = true
       this.rotation = 0
       this.orientation = 1
@@ -387,44 +386,68 @@ export default {
       let file = event.target.files[0]
       let reader  = new FileReader()  
       reader.addEventListener("load", (event) => {
-        this.setImageData(event.target.result)
+        // this.setImageData(event.target.result)
         let img = new Image()
         img.onload = () => {
           EXIF.getData(img, () => {
+            let w = img.naturalWidth
+            let h = img.naturalHeight
+            let ratio = w/h
+
+            if((h > 2400) || (w > 2400)){
+              if (h > w) {
+                h = 2400
+                w = h*ratio
+              } else {
+                w = 2400
+                h = w/ratio
+              }
+            }
+
+            this.naturalHeight = h
+            this.naturalWidth = w
+
+            var canvas = document.createElement('CANVAS')
+            var ctx = canvas.getContext('2d')
+
+            canvas.height = h
+            canvas.width = w
+
+            ctx.drawImage(img, 0, 0, w, h)
+            var dataURL = canvas.toDataURL('image/jpeg', .8)
+            this.setImageData(dataURL)
+
             let orientation = img.exifdata.Orientation
             this.orientation = orientation
-            console.log('image orientation: ',  img.exifdata)
-            this.naturalWidth = img.naturalWidth
-            this.naturalHeight = img.naturalHeight
 
             switch(orientation) {
               case 8:
                 this.rotation = 270
-                this.imgWidth = img.naturalHeight
-                this.imgHeight = img.naturalWidth
+                this.imgWidth = h
+                this.imgHeight = w
                 break
               case 6:
                 this.rotation = 90
-                this.imgWidth = img.naturalHeight
-                this.imgHeight = img.naturalWidth
+                this.imgWidth = h
+                this.imgHeight = w
                 break
               case 3: 
                 this.rotation = 180
-                this.imgWidth = img.naturalWidth
-                this.imgHeight = img.naturalHeight
+                this.imgWidth = w
+                this.imgHeight = h
                 break
               default: 
                 this.rotation = 0
-                this.imgWidth = img.naturalWidth
-                this.imgHeight = img.naturalHeight
+                this.imgWidth = w
+                this.imgHeight = h
             }
-            
+
             this.$nextTick(() => {
               this.svgToPng()
             })
           })          
         }
-        img.src = reader.result
+        img.src = event.target.result
       }, false)
 
       if (file) {
@@ -449,10 +472,9 @@ export default {
 
       let h = this.imgHeight = this.naturalHeight = img.naturalHeight
       let w = this.imgWidth = this.naturalWidth = img.naturalWidth
-      let ratio = w/h
 
-      canvas.height = this.canvasHeight = h
-      canvas.width = this.canvasWidth = w
+      canvas.height = h
+      canvas.width = w
 
       ctx.drawImage(img, 0, 0)
       dataURL = canvas.toDataURL('image/jpeg', .8)
@@ -462,26 +484,13 @@ export default {
       })
     },
     svgToPng(){
-      console.log('starting svg to png')
       var svgString = new XMLSerializer().serializeToString(document.getElementById('duotone'));
-      var src = 'data:image/svg+xml;utf-8,' + svgString
-      var canvas = document.getElementById("canvas")
+      var src = 'data:image/svg+xml;base64,' + window.btoa(svgString)
+      var canvas = document.getElementById('canvas') // document.createElement('canvas')
       var ctx = canvas.getContext("2d");
 
-      let h = this.imgHeight
-      let w = this.imgWidth
-      let ratio = w/h
-
-      if (h > w) {
-        let h = 1200
-        let w = h*ratio
-      } else {
-        let w = 1200
-        let h = 1200/ratio
-      }
-
-      canvas.height = this.downloading ? this.imgHeight : h
-      canvas.width = this.downloading ? this.imgWidth : w
+      let h = canvas.height = this.imgHeight
+      let w = canvas.width = this.imgWidth
 
       var img = document.createElement('img')
       // console.log('dom url: ',url)
@@ -496,10 +505,12 @@ export default {
           this.loading = false
 
           if (this.downloading) {
+            console.log('triggering download link click')
             var link = document.getElementById("download-link")
             link.href = jpg
             link.click()
             this.downloading = false
+            link.href = ''
           }
       };
       img.src = src;

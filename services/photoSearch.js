@@ -29,7 +29,7 @@ export default getPhotos
 
 function hitMap (hit) {
   let url = btoa('http://s3.glyphs.co/stock/' + hit.filename)
-  hit.url = 'https://img.glyphs.co/img/?q=85&src=' + url 
+  hit.url = 'https://img.glyphs.co/img/?w=2400&q=85&src=' + url 
   hit.urlSmall = 'https://img.glyphs.co/img/?w=400&h=250&crop=true&enlarge=true&q=70&src=' + url
   hit.urlMedium = 'https://img.glyphs.co/img/?w=1200&q=75&src=' + url 
 
