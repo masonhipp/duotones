@@ -372,6 +372,7 @@ export default {
       return 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')'
     },
     setImageData(data) {
+      console.log('set image data')
       let image = document.getElementById('source-image')
       image.setAttributeNS("http://www.w3.org/1999/xlink", 'xlink:href', data)
     },
@@ -461,6 +462,7 @@ export default {
       }
     },
     imageEvent(event) {
+      console.log('imageEvent')
       this.loading = this.downloading ? this.loading :  true
       this.getDataUri(event.target)
     },
@@ -512,7 +514,7 @@ export default {
             link.href = jpg
             link.click()
             this.downloading = false
-            link.href = ''
+            // link.href = ''
           }
       };
       img.src = src;
