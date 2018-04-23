@@ -158,7 +158,6 @@
                  :transform="'rotate(' + rotation + ' ' + imgWidth/2 + ' ' + imgHeight/2 + ')' + ' translate(-' + naturalWidth/2 + ' -' + naturalHeight/2 + ')'"
                  :width="naturalWidth"
                  :height="naturalHeight"
-                 v-bind="{'xlink:href': imgData}"
                  filter="url(#duotone-filter)"
                  preserveAspectRatio="xMidYMid slice"/>
         </svg>
@@ -375,9 +374,9 @@ export default {
     },
     setImageData(data) {
       console.log('set image data')
-      this.imgData = data
-      //let image = document.getElementById('source-image')
-      //image.setAttributeNS("http://www.w3.org/1999/xlink", 'xlink:href', data)
+      // this.imgData = data
+      let image = document.getElementById('source-image')
+      image.setAttributeNS("http://www.w3.org/1999/xlink", 'xlink:href', data)
     },
     toHex(color) {
       return '#' + color.reduce((acc, val) => {
@@ -514,6 +513,7 @@ export default {
           ctx.drawImage(img, 0, 0);
           let jpg = canvas.toDataURL("image/jpeg", .8)
           var link = document.getElementById("download-link")
+          link.href = jpg
           link.href = jpg
 
           setTimeout(() => {
