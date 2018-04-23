@@ -513,7 +513,7 @@ export default {
       img.onload = () => {
         console.log('svg2png image onload event')
         console.log('img src length: ' + img.src.length)
-          ctx.drawImage(img, 0, 0, w, h);
+          ctx.drawImage(img, 0, 0, w, h, 0, 0, w, h);
           let jpg = canvas.toDataURL("image/jpeg", .8)
           console.log('canvas length: ' + jpg.length)
           var link = document.getElementById("download-link")
