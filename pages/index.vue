@@ -216,7 +216,7 @@
         </div>
       </div>
     </div>
-    <canvas id="canvas" style="display:none;" />
+    <canvas id="canvas" :width="imgWidth" :height="imgHeight" style="display:none;" />
     <!-- <a id="download-link" src="" download="duotone.jpg" style="display:none"/> -->
   </div>
 </template>
@@ -500,22 +500,24 @@ export default {
       console.log('svg to png')
       var svgString = new XMLSerializer().serializeToString(document.getElementById('duotone'));
       var src = 'data:image/svg+xml;base64,' + window.btoa(svgString)
-      // var canvas = document.getElementById('canvas')
-      var canvas = document.createElement('canvas')
+      console.log('svg string length: ' + src.length)
+      var canvas = document.getElementById('canvas')
+      // var canvas = document.createElement('canvas')
       var ctx = canvas.getContext("2d");
 
-      let h = canvas.height = this.imgHeight
-      let w = canvas.width = this.imgWidth
+      let h = this.imgHeight
+      let w = this.imgWidth
 
       var img = document.createElement('img')
       // console.log('dom url: ',url)
       img.onload = () => {
         console.log('svg2png image onload event')
-          ctx.drawImage(img, 0, 0);
+          ctx.drawImage(img, 0, 0, w, h);
           let jpg = canvas.toDataURL("image/jpeg", .8)
+          console.log('canvas length: ' + jpg.length)
           var link = document.getElementById("download-link")
           link.href = jpg
-          link.href = jpg
+          console.log('link href length: ' + link.href.length)
 
           setTimeout(() => {
             document.getElementById('jpg-container').src = jpg
