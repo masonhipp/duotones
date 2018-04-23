@@ -155,9 +155,10 @@
             </filter>    
           </defs>
           <image id="source-image" x="50%" y="50%"
-                 :transform="'rotate(' + rotation + ' ' + imgWidth/2 + ' ' + imgHeight/2 + ')' + 'translate(-' + naturalWidth/2 + ' -' + naturalHeight/2 + ')'"
+                 :transform="'rotate(' + rotation + ' ' + imgWidth/2 + ' ' + imgHeight/2 + ')' + ' translate(-' + naturalWidth/2 + ' -' + naturalHeight/2 + ')'"
                  :width="naturalWidth"
                  :height="naturalHeight"
+                 v-bind="{'xlink:href': imgData}"
                  filter="url(#duotone-filter)"
                  preserveAspectRatio="xMidYMid slice"/>
         </svg>
@@ -206,7 +207,7 @@
             </p>
           </div>-->
           <div class="field">
-            <a @click.prevent="downloadJpeg" :style="{'background-color': toRGB(colorTwo)}" :class="{'is-loading': downloading}" class="button download">
+            <a @click="downloadJpeg" :style="{'background-color': toRGB(colorTwo)}" :class="{'is-loading': downloading}" class="button download">
               <span class="icon">
                 <i class="fa fa-cloud-download" />
               </span>
@@ -231,6 +232,7 @@ export default {
     return {
       photos: [],
       query: '',
+      imgData: '',
       loading:false,
       userImage: false,
       downloading:false,
@@ -373,8 +375,9 @@ export default {
     },
     setImageData(data) {
       console.log('set image data')
-      let image = document.getElementById('source-image')
-      image.setAttributeNS("http://www.w3.org/1999/xlink", 'xlink:href', data)
+      this.imgData = data
+      //let image = document.getElementById('source-image')
+      //image.setAttributeNS("http://www.w3.org/1999/xlink", 'xlink:href', data)
     },
     toHex(color) {
       return '#' + color.reduce((acc, val) => {
@@ -455,7 +458,8 @@ export default {
         reader.readAsDataURL(file);
       }
     },
-    downloadJpeg(){
+    downloadJpeg(event){
+      event.preventDefault()
       this.downloading = true
       if (this.userImage) { 
         this.svgToPng();
@@ -514,7 +518,7 @@ export default {
             link.href = jpg
             link.click()
             this.downloading = false
-            // link.href = ''
+            link.href = ''
           }
       };
       img.src = src;
