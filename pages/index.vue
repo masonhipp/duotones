@@ -500,7 +500,8 @@ export default {
       console.log('svg to png')
       var svgString = new XMLSerializer().serializeToString(document.getElementById('duotone'));
       var src = 'data:image/svg+xml;base64,' + window.btoa(svgString)
-      var canvas = document.getElementById('canvas') // document.createElement('canvas')
+      // var canvas = document.getElementById('canvas')
+      var canvas = document.createElement('canvas')
       var ctx = canvas.getContext("2d");
 
       let h = canvas.height = this.imgHeight
