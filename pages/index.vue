@@ -100,8 +100,8 @@
       </div>
     </div>
     
-    <img v-if="downloading && !userImage" crossOrigin="Anonymous" id="download-container" :src="selectedPhoto.url" style="display:none;" @load="imageEvent">
-    <img crossOrigin="Anonymous" id="image-container" style="display:none;" :src="selectedPhoto.urlMedium" @load="imageEvent">
+    <!-- <img v-if="downloading && !userImage" crossOrigin="Anonymous" id="download-container" :src="selectedPhoto.url" style="display:none;" @load="imageEvent"> -->
+    <img crossOrigin="Anonymous" id="image-container" style="display:none;" :src="selectedPhoto.url" @load="imageEvent">
     
 
     <div class="column main-image">
@@ -207,7 +207,7 @@
             </p>
           </div>-->
           <div class="field">
-            <a @click="downloadJpeg" :style="{'background-color': toRGB(colorTwo)}" :class="{'is-loading': downloading}" class="button download">
+            <a id="download-link" @click="downloadJpeg" download="duotone.jpg" :style="{'background-color': toRGB(colorTwo)}" :class="{'is-loading': downloading}" class="button download">
               <span class="icon">
                 <i class="fa fa-cloud-download" />
               </span>
@@ -218,7 +218,7 @@
       </div>
     </div>
     <canvas id="canvas" style="display:none;" />
-    <a id="download-link" src="" download="duotone.jpg" style="display:none"/>
+    <!-- <a id="download-link" src="" download="duotone.jpg" style="display:none"/> -->
   </div>
 </template>
 <script>
@@ -459,11 +459,18 @@ export default {
       }
     },
     downloadJpeg(event){
-      event.preventDefault()
+      //event.preventDefault()
       this.downloading = true
-      if (this.userImage) { 
+
+      //var link = document.getElementById("download-link")
+      //link.click()
+
+      setTimeout(()=>{
+        this.downloading = false
+      }, 700)
+      /*if (this.userImage) {
         this.svgToPng();
-      }
+      }*/
     },
     imageEvent(event) {
       console.log('imageEvent')
@@ -506,6 +513,9 @@ export default {
         console.log('svg2png image onload event')
           ctx.drawImage(img, 0, 0);
           let jpg = canvas.toDataURL("image/jpeg", .8)
+          var link = document.getElementById("download-link")
+          link.href = jpg
+
           setTimeout(() => {
             document.getElementById('jpg-container').src = jpg
           }, 650)
@@ -513,12 +523,12 @@ export default {
           this.loading = false
 
           if (this.downloading) {
-            console.log('triggering download link click')
-            var link = document.getElementById("download-link")
-            link.href = jpg
-            link.click()
+            //console.log('triggering download link click')
+            //var link = document.getElementById("download-link")
+            //link.href = jpg
+            //link.click()
             this.downloading = false
-            link.href = ''
+            //link.href = ''
           }
       };
       img.src = src;
