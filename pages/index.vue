@@ -206,7 +206,7 @@
             </p>
           </div>-->
           <div class="field">
-            <a id="download-link" @click="downloadJpeg" download="duotone.jpg" :style="{'background-color': toRGB(colorTwo)}" :class="{'is-loading': downloading}" class="button download">
+            <a @click="downloadJpeg" download="duotone.jpg" :style="{'background-color': toRGB(colorTwo)}" :class="{'is-loading': downloading}" class="button download">
               <span class="icon">
                 <i class="fa fa-cloud-download" />
               </span>
@@ -217,7 +217,7 @@
       </div>
     </div>
     <canvas id="canvas" :width="imgWidth" :height="imgHeight" style="display:none;" />
-    <!-- <a id="download-link" src="" download="duotone.jpg" style="display:none"/> -->
+    <a id="download-link" src="" download="duotone.jpg" style="display:none"/>
   </div>
 </template>
 <script>
@@ -458,18 +458,17 @@ export default {
       }
     },
     downloadJpeg(event){
-      //event.preventDefault()
+      event.preventDefault()
       this.downloading = true
-
-      //var link = document.getElementById("download-link")
-      //link.click()
+      this.svgToPng()
 
       setTimeout(()=>{
         this.downloading = false
       }, 700)
+
       /*if (this.userImage) {
-        this.svgToPng();
-      }*/
+        this.svgToPng()
+      }*/open
     },
     imageEvent(event) {
       console.log('imageEvent')
@@ -493,9 +492,7 @@ export default {
       this.setImageData(dataURL)
 
       this.$nextTick(() => {
-        setTimeout(()=>{
-            this.svgToPng()
-        }, 300)
+        this.svgToPng()
       })
     },
     svgToPng(){
@@ -529,12 +526,12 @@ export default {
           this.loading = false
 
           if (this.downloading) {
-            //console.log('triggering download link click')
-            //var link = document.getElementById("download-link")
-            //link.href = jpg
-            //link.click()
+            console.log('triggering download link click')
+            var link = document.getElementById("download-link")
+            link.href = jpg
+            link.click()
             this.downloading = false
-            //link.href = ''
+            // link.href = ''
           }
       };
       img.src = src;
