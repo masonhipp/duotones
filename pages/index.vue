@@ -235,7 +235,7 @@ export default {
       downloading:false,
       rotation: 0,
       orientation: 1,
-      contrast: 1, // contrast filter
+      contrast: 1,
       brightness: 1,
       naturalWidth: 1024,
       naturalHeight: 640,
@@ -243,7 +243,6 @@ export default {
       imgHeight: 640,
       showTransition: false,
       selectedPhoto: [],
-      // defaultPhoto: 'https://jmperezperez.com/assets/images/posts/fecolormatrix-kanye-west.jpg',
       activeTab: 'colors',
       selectedPhoto: {
         url: 'https://img.glyphs.co/img/?w=1600&q=75&src=aHR0cDovL3MzLmdseXBocy5jby9zdG9jay9waG90by0xNDQ5NDgwODgxMzkyLTcxNmQwZWEyNGE0Ny5qcGc=',
@@ -337,7 +336,6 @@ export default {
       var top = ((height / 2) - (h / 2)) + dualScreenTop;
       var newWindow = window.open(link, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
 
-      // Puts focus on the newWindow
       if (window.focus) {
           newWindow.focus();
       }
@@ -371,7 +369,6 @@ export default {
       return 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')'
     },
     setImageData(data) {
-      console.log('set image data')
       // this.imgData = data
       let image = document.getElementById('source-image')
       image.setAttributeNS("http://www.w3.org/1999/xlink", 'xlink:href', data)
@@ -387,7 +384,6 @@ export default {
       let file = event.target.files[0]
       let reader  = new FileReader()  
       reader.addEventListener("load", (event) => {
-        // this.setImageData(event.target.result)
         let img = new Image()
         img.onload = () => {
           EXIF.getData(img, () => {
@@ -462,19 +458,13 @@ export default {
 
       setTimeout(()=>{
         this.downloading = false
-      }, 700)
-
-      /*if (this.userImage) {
-        this.svgToPng()
-      }*/
+      }, 600)
     },
     imageEvent(event) {
-      console.log('imageEvent')
       this.loading = this.downloading ? this.loading :  true
       this.getDataUri(event.target)
     },
     getDataUri(img) {
-      console.log('get data uri')
       var canvas = document.createElement('CANVAS')
       var ctx = canvas.getContext('2d', { alpha: false })
       var dataURL
@@ -494,42 +484,36 @@ export default {
       })
     },
     svgToPng(){
-      console.log('svg to png')
       var svgString = new XMLSerializer().serializeToString(document.getElementById('duotone'));
       var src = 'data:image/svg+xml;base64,' + window.btoa(svgString)
-      console.log('svg string length: ' + src.length)
       var img = document.createElement('img')
-      // console.log('dom url: ',url)
+
       img.onload = () => {
-        console.log('svg2png image onload event')
-        var canvas = document.createElement('CANVAS')
-        var ctx = canvas.getContext("2d", { alpha: false });
+        let canvas = document.createElement('CANVAS')
+        let ctx = canvas.getContext("2d", { alpha: false });
 
         let h = canvas.height = this.imgHeight
         let w = canvas.width = this.imgWidth
         
-        console.log('img src length: ' + img.src.length)
-          ctx.drawImage(img, 0, 0, w, h, 0, 0, w, h)
-          let jpg = canvas.toDataURL("image/jpeg", .7)
-          console.log('canvas length: ' + jpg.length)
+        ctx.drawImage(img, 0, 0, w, h, 0, 0, w, h)
+        let jpg = canvas.toDataURL("image/jpeg", .7)
 
-          setTimeout(() => {
-            document.getElementById('jpg-container').src = jpg
-          }, 650)
+        setTimeout(() => {
+          document.getElementById('jpg-container').src = jpg
+        }, 650)
 
-          this.loading = false
+        this.loading = false
 
-          if (this.downloading) {
-            console.log('triggering download link click')
-            var link = document.createElement("a")
-            link.download = "duotone.jpg"
-            link.href = jpg
-            link.click()
-            this.downloading = false
-            // link.href = ''
-          }
-      };
-      img.src = src;
+        if (this.downloading) {
+          let link = document.createElement("a")
+          link.download = "duotone.jpg"
+          link.href = jpg
+          link.click()
+          this.downloading = false
+        }
+      }
+
+      img.src = src
     }
   }
 }
