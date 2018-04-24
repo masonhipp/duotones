@@ -126,7 +126,7 @@
             <i class="fa fa-facebook"/>
           </a>
         </div>
-        <p :style="{'color': toRGB(colorOne)}" class="hex top">{{ toHex(colorOne) }}</p>
+        <p @click="svgToPng()" :style="{'color': toRGB(colorOne)}" class="hex top">{{ toHex(colorOne) }}</p>
         <p :style="{'color': toRGB(colorTwo)}" class="hex bottom">{{ toHex(colorTwo) }}</p>
         
         <p class="attribution"><a href="https://medialoot.com"><span>powered by</span> Medialoot</a></p>
@@ -501,19 +501,19 @@ export default {
       var svgString = new XMLSerializer().serializeToString(document.getElementById('duotone'));
       var src = 'data:image/svg+xml;base64,' + window.btoa(svgString)
       console.log('svg string length: ' + src.length)
-      var canvas = document.getElementById('canvas')
-      // var canvas = document.createElement('canvas')
-      var ctx = canvas.getContext("2d");
-
-      let h = this.imgHeight
-      let w = this.imgWidth
-
       var img = document.createElement('img')
       // console.log('dom url: ',url)
       img.onload = () => {
         console.log('svg2png image onload event')
+        var canvas = document.getElementById('canvas')
+        // var canvas = document.createElement('canvas')
+        var ctx = canvas.getContext("2d");
+
+        let h = canvas.height = this.imgHeight
+        let w = canvas.width = this.imgWidth
+        
         console.log('img src length: ' + img.src.length)
-          ctx.drawImage(img, 0, 0, w, h, 0, 0, w, h);
+          ctx.drawImage(img, 0, 0, w, h, 0, 0, w, h)
           let jpg = canvas.toDataURL("image/jpeg", .8)
           console.log('canvas length: ' + jpg.length)
           var link = document.getElementById("download-link")
