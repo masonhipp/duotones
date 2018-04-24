@@ -216,8 +216,6 @@
         </div>
       </div>
     </div>
-    <canvas id="canvas" :width="imgWidth" :height="imgHeight" style="display:none;" />
-    <a id="download-link" src="" download="duotone.jpg" style="display:none"/>
   </div>
 </template>
 <script>
@@ -248,7 +246,7 @@ export default {
       // defaultPhoto: 'https://jmperezperez.com/assets/images/posts/fecolormatrix-kanye-west.jpg',
       activeTab: 'colors',
       selectedPhoto: {
-        url: 'https://img.glyphs.co/img/?q=85&src=aHR0cDovL3MzLmdseXBocy5jby9zdG9jay9waG90by0xNDQ5NDgwODgxMzkyLTcxNmQwZWEyNGE0Ny5qcGc=',
+        url: 'https://img.glyphs.co/img/?w=1600&q=75&src=aHR0cDovL3MzLmdseXBocy5jby9zdG9jay9waG90by0xNDQ5NDgwODgxMzkyLTcxNmQwZWEyNGE0Ny5qcGc=',
         urlMedium: 'https://img.glyphs.co/img/?w=1200&q=75&src=aHR0cDovL3MzLmdseXBocy5jby9zdG9jay9waG90by0xNDQ5NDgwODgxMzkyLTcxNmQwZWEyNGE0Ny5qcGc=',
         urlSmall: 'https://img.glyphs.co/img/?w=400&h=250&crop=true&enlarge=true&q=70&src=aHR0cDovL3MzLmdseXBocy5jby9zdG9jay9waG90by0xNDQ5NDgwODgxMzkyLTcxNmQwZWEyNGE0Ny5qcGc='
       },
@@ -411,13 +409,13 @@ export default {
             this.naturalWidth = w
 
             var canvas = document.createElement('CANVAS')
-            var ctx = canvas.getContext('2d')
+            var ctx = canvas.getContext('2d', { alpha: false })
 
             canvas.height = h
             canvas.width = w
 
             ctx.drawImage(img, 0, 0, w, h)
-            var dataURL = canvas.toDataURL('image/jpeg', .8)
+            var dataURL = canvas.toDataURL('image/jpeg', .7)
             this.setImageData(dataURL)
 
             let orientation = img.exifdata.Orientation
@@ -478,7 +476,7 @@ export default {
     getDataUri(img) {
       console.log('get data uri')
       var canvas = document.createElement('CANVAS')
-      var ctx = canvas.getContext('2d')
+      var ctx = canvas.getContext('2d', { alpha: false })
       var dataURL
 
       let h = this.imgHeight = this.naturalHeight = img.naturalHeight
@@ -488,7 +486,7 @@ export default {
       canvas.width = w
 
       ctx.drawImage(img, 0, 0)
-      dataURL = canvas.toDataURL('image/jpeg', .8)
+      dataURL = canvas.toDataURL('image/jpeg', .7)
       this.setImageData(dataURL)
 
       this.$nextTick(() => {
@@ -504,20 +502,16 @@ export default {
       // console.log('dom url: ',url)
       img.onload = () => {
         console.log('svg2png image onload event')
-        var canvas = document.getElementById('canvas')
-        // var canvas = document.createElement('canvas')
-        var ctx = canvas.getContext("2d");
+        var canvas = document.createElement('CANVAS')
+        var ctx = canvas.getContext("2d", { alpha: false });
 
         let h = canvas.height = this.imgHeight
         let w = canvas.width = this.imgWidth
         
         console.log('img src length: ' + img.src.length)
           ctx.drawImage(img, 0, 0, w, h, 0, 0, w, h)
-          let jpg = canvas.toDataURL("image/jpeg", .8)
+          let jpg = canvas.toDataURL("image/jpeg", .7)
           console.log('canvas length: ' + jpg.length)
-          var link = document.getElementById("download-link")
-          link.href = jpg
-          console.log('link href length: ' + link.href.length)
 
           setTimeout(() => {
             document.getElementById('jpg-container').src = jpg
@@ -527,7 +521,8 @@ export default {
 
           if (this.downloading) {
             console.log('triggering download link click')
-            var link = document.getElementById("download-link")
+            var link = document.createElement("a")
+            link.download = "duotone.jpg"
             link.href = jpg
             link.click()
             this.downloading = false
