@@ -468,7 +468,7 @@ export default {
 
       /*if (this.userImage) {
         this.svgToPng()
-      }*/open
+      }*/
     },
     imageEvent(event) {
       console.log('imageEvent')
