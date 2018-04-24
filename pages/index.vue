@@ -493,7 +493,9 @@ export default {
       this.setImageData(dataURL)
 
       this.$nextTick(() => {
-        this.svgToPng()
+        setTimeout(()=>{
+            this.svgToPng()
+        }, 300)
       })
     },
     svgToPng(){
