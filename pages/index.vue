@@ -45,7 +45,7 @@
         </div>
 
         <div v-if="activeTab === 'colors'" class="color-tab tab-content pretty-scroll">
-          <div class="swatches">
+          <div v-if="shuffled" class="swatches">
             <div v-for="color in colors" :key="color.name" class="swatch" >
               <div class="colors" @click="changeColor(color)">
                 <div :style="{'background-color': toRGB(color.one)}" class="color one">
@@ -221,6 +221,7 @@
 <script>
 var EXIF = require('exif-js')
 import debounce from 'lodash/debounce'
+import shuffle from 'lodash/shuffle'
 import getPhotos from '~/services/photoSearch.js'
 
 export default {
@@ -229,6 +230,7 @@ export default {
     return {
       photos: [],
       query: '',
+      shuffled: false,
       imgData: '',
       loading:false,
       userImage: false,
@@ -286,7 +288,53 @@ export default {
           name: 'Fire Engine',
           one: [240, 14, 46],
           two: [10, 5, 5],
+        },
+        {
+          name: 'Electric Melon',
+          one: [239, 0, 158],
+          two: [80, 98, 214],
+        },
+        {
+          name: 'Blueberry',
+          one: [1, 219, 254],
+          two: [127, 1, 211],
+        },
+        {
+          name: 'Spotify',
+          one: [106, 255, 127],
+          two: [0, 0, 126],
+        },
+        {
+          name: 'Purple Light',
+          one: [222, 252, 254],
+          two: [134, 130, 217],
+        },
+        {
+          name: 'Seashell',
+          one: [253, 217, 226],
+          two: [101, 183, 214],
+        },
+        {
+          name: 'Clouds',
+          one: [255, 255, 255],
+          two: [145, 207, 248],
+        },
+        {
+          name: 'Western',
+          one: [255, 151, 56],
+          two: [54, 32, 12],
+        },
+        {
+          name: 'Ivy League',
+          one: [223, 178, 51],
+          two: [47, 7, 129],
+        },
+        {
+          name: 'Gryffindor',
+          one: [248, 190, 61],
+          two: [104, 34, 24],
         }
+
       ]
     }
   },
@@ -316,6 +364,13 @@ export default {
         this.getPhotos(val)
       }
     }, 200)
+  },
+  created () {
+    if(process.browser && !this.shuffled){
+      console.log('shuffling')
+      this.colors = shuffle(this.colors)
+      this.shuffled = true
+    }
   },
   mounted (){
     this.getPhotos()
