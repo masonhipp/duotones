@@ -6,7 +6,7 @@
           <span class="circle two" :style="{ backgroundColor: toHex(colorOne)}"/>
           <span class="circle one" :style="{ backgroundColor: toHex(colorTwo)}"/>
         </div>
-        <h1>duotone</h1>
+        <h1>duotones</h1>
         <p>Pairings & Effect Generator</p>
       </div>
       <div class="controls-content">
@@ -45,7 +45,7 @@
         </div>
 
         <div v-if="activeTab === 'colors'" class="color-tab tab-content pretty-scroll">
-          <div v-if="shuffled" class="swatches">
+          <div  class="swatches">
             <div v-for="color in colors" :key="color.name" class="swatch" >
               <div class="colors" @click="changeColor(color)">
                 <div :style="{'background-color': toRGB(color.one)}" class="color one">
@@ -367,9 +367,8 @@ export default {
   },
   created () {
     if(process.browser && !this.shuffled){
-      console.log('shuffling')
-      this.colors = shuffle(this.colors)
-      this.shuffled = true
+      // this.colors = shuffle(this.colors)
+      // this.shuffled = true
     }
   },
   mounted (){
