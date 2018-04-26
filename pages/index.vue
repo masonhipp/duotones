@@ -88,6 +88,21 @@
         </div>
 
         <div v-if="activeTab === 'settings'" class="settings-tab tab-content pretty-scroll">
+          <div class="buttons contrast-controls">
+            <div class="button is-dark" @click="setContrast(1,1)">
+              Default
+            </div>
+            <div class="button is-dark" @click="setContrast(3,2)">
+              Posterize
+            </div>
+            <div class="button is-dark" @click="setContrast(.4,1.7)">
+              High Key
+            </div>
+            <div class="button is-dark" @click="setContrast(2,.5)">
+              Low Key
+            </div>
+
+          </div>
           <p>contrast</p>
           <input v-model="contrast" class="slider is-fullwidth is-black is-large is-circle" step=".1" min=".1" max="3" value="1" type="range">
 
@@ -392,6 +407,12 @@ export default {
 
       if (window.focus) {
           newWindow.focus();
+      }
+    },
+    setContrast(contrast, brightness) {
+      this.contrast = contrast
+      if(brightness) {
+        this.brightness = brightness
       }
     },
     togglePhoto (hit) {
@@ -1178,6 +1199,11 @@ export default {
     width:100%;
     height:100%;
   }
+
+  .contrast-controls {
+    display:none;
+  }
+  
   .main-image{
     
     position:fixed;
