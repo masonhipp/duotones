@@ -60,10 +60,10 @@
             <div class="swatch custom" :class="{'is-selected': customSelected}" @click.stop="selectCustom()">
               <div class="colors">
                 <div class="color one" :style="{'background-color': toHex(customColorOne)}" @click="toggleCustom('one')">
-                  <span class="edit" >{{showCustom === 'one' ? 'close X' : 'edit'}}</span>
+                  <!-- <span class="edit" >{{showCustom === 'one' ? 'close X' : 'edit'}}</span> -->
                 </div>
                 <div class="color two" :style="{'background-color': toHex(customColorTwo)}" @click="toggleCustom('two')">
-                  <span class="edit" >{{showCustom === 'two' ? 'close X' : 'edit'}}</span>
+                  <!-- <span class="edit" >{{showCustom === 'two' ? 'close X' : 'edit'}}</span> -->
                 </div>
               </div>
               <p>Custom</p>
