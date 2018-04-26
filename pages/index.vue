@@ -1,5 +1,5 @@
 <template>
-  <div class="columns">
+  <div class="columns" @click="closePicker()">
     <div class="column is-3 controls">
       <div class="brand">
         <div class="logo">
@@ -56,6 +56,19 @@
                 </div>
               </div>
               <p>{{ color.name }}</p>
+            </div>
+            <div class="swatch custom" :class="{'is-selected': customSelected}" @click.stop="selectCustom()">
+              <div class="colors">
+                <div class="color one" :style="{'background-color': toHex(customColorOne)}" @click="toggleCustom('one')">
+                  <span class="edit" >{{showCustom === 'one' ? 'close X' : 'edit'}}</span>
+                </div>
+                <div class="color two" :style="{'background-color': toHex(customColorTwo)}" @click="toggleCustom('two')">
+                  <span class="edit" >{{showCustom === 'two' ? 'close X' : 'edit'}}</span>
+                </div>
+              </div>
+              <p>Custom</p>
+              <color-picker v-if="showCustom === 'one'" :value="toHex(customColorOne)" class="picker picker-one" @input="setCustomOne" :disableAlpha="true" />
+              <color-picker v-if="showCustom === 'two'" :value="toHex(customColorTwo)" class="picker picker-two" @input="setCustomTwo" :disableAlpha="true" />
             </div>
           </div>
         </div> <!-- end colors -->
@@ -235,24 +248,33 @@
 </template>
 <script>
 var EXIF = require('exif-js')
+
+import { Chrome } from 'vue-color'
 import debounce from 'lodash/debounce'
 import shuffle from 'lodash/shuffle'
 import getPhotos from '~/services/photoSearch.js'
 
 export default {
   layout: 'duotones',
+  components: {
+    'color-picker': Chrome
+  },
   data() {
     return {
       photos: [],
       query: '',
+      customSelected: false,
       shuffled: false,
       imgData: '',
+      showCustom: '',
       loading:false,
       userImage: false,
       downloading:false,
       rotation: 0,
       orientation: 1,
       contrast: 1,
+      customColorOne: [70,70,70],
+      customColorTwo: [50,50,50],
       brightness: 1,
       naturalWidth: 1024,
       naturalHeight: 640,
@@ -393,6 +415,29 @@ export default {
     async getPhotos (query) {
       this.photos = await getPhotos(query)
     },
+    toggleCustom(val) {
+      if(this.customSelected){
+        this.showCustom = this.showCustom === val ? '' : val
+      }
+    },
+    closePicker(){
+      if(this.showCustom !== ''){
+        this.showCustom = ''
+      }
+    },
+    selectCustom(){
+      this.customSelected = true
+      this.colorOne = this.customColorOne
+      this.colorTwo = this.customColorTwo
+    },
+    setCustomOne(color) {
+      this.customColorOne = [color.rgba.r, color.rgba.g, color.rgba.b]
+      this.colorOne = [color.rgba.r, color.rgba.g, color.rgba.b]
+    },
+    setCustomTwo(color) {
+      this.customColorTwo = [color.rgba.r, color.rgba.g, color.rgba.b]
+      this.colorTwo = [color.rgba.r, color.rgba.g, color.rgba.b]
+    },
     openSocial(event, w, h) {
       let link = event.target.href
       var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : window.screenX;
@@ -428,6 +473,7 @@ export default {
     },
     changeColor(color){
       this.showTransition = true
+      this.customSelected = false
 
       setTimeout(() => {
         this.showTransition = false
@@ -706,7 +752,7 @@ export default {
     padding:50% 0%;
     transform: rotate(40deg);
     border-radius:50%;
-    overflow:hidden;
+    // overflow:hidden;
     box-shadow:1px 1px 15px rgba(0,0,0,.2);
   }
 
@@ -738,6 +784,44 @@ export default {
     padding-top:5px;
     bottom:-20px;
     left:50%;
+  }
+
+  &.custom {
+
+    &.is-selected .color:hover{
+        transform:scaleX(1.1) scaleY(1.1);
+        z-index:2;
+      }
+
+    &.is-selected .color .edit{
+      display:block;
+      font-size:.8em;
+      opacity:.7;
+      transform: translateY(-50%) ;
+      position:absolute;
+      top:50%;
+      left:0;
+      right:0;
+      margin:0 auto;
+    }
+
+    .color{
+      transition:transform .2s ease;
+    }
+    .one {
+      background-color:#666;
+    }
+    .two {
+      background-color:#444;
+    }
+
+    .picker {
+      position:absolute;
+      top: -260px;
+      left:50%;
+      transform:translateX(-50%);
+      margin:0 auto;
+    }
   }
 }
 
@@ -1203,7 +1287,7 @@ export default {
   .contrast-controls {
     display:none;
   }
-  
+
   .main-image{
     
     position:fixed;

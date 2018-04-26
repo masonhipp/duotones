@@ -21,7 +21,8 @@
     "lodash": "^4.17.4",
     "nuxt": "^1.0.0",
     "source-map-support": "^0.4.15",
-    "vue-analytics": "^5.10.2"
+    "vue-analytics": "^5.10.2",
+    "vue-color": "^2.4.6"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
