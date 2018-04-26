@@ -109,10 +109,6 @@
         <div v-if="loading" class="img-loader">Loading...</div>
         <div v-if="loading" class="loader-drop" />
         <div class="social-share" >
-          <a class="icon download" :style="{backgroundColor: toHex(colorOne)}"
-             @click.prevent="downloadJpeg">
-            <img src="/download-icon.svg" />
-          </a>
           <a :style="{backgroundColor: toHex(colorOne)}" 
              href="https://twitter.com/intent/tweet?url=https://duotones.co&text=Duotone color pairings and effect generator – "
              class="icon"
@@ -124,6 +120,10 @@
              class="icon"
              @click.prevent="openSocial($event, 583, 400)">
             <i class="fa fa-facebook"/>
+          </a>
+          <a class="icon download" :style="{backgroundColor: toHex(colorOne)}"
+             @click.prevent="downloadJpeg">
+            <img src="/download-icon.svg" />
           </a>
         </div>
         <p @click="svgToPng()" :style="{'color': toRGB(colorOne)}" class="hex top">{{ toHex(colorOne) }}</p>
@@ -255,9 +255,19 @@ export default {
       colorTwo: [1, 171, 109],
       colors: [
         {
-          name: 'Forrest',
-          one: [1, 171, 109],
-          two: [36, 26, 95],
+          name: 'Spotify',
+          one: [106, 255, 127],
+          two: [0, 0, 126],
+        },
+        {
+          name: 'Gryffindor',
+          one: [248, 190, 61],
+          two: [104, 34, 24],
+        },
+        {
+          name: 'Blueberry',
+          one: [1, 219, 254],
+          two: [127, 1, 211],
         },
         {
           name: 'Mountain Dew',
@@ -265,9 +275,9 @@ export default {
           two: [1, 171, 109],
         },
         {
-          name: 'Seafoam',
-          one: [172, 212, 157],
-          two: [96, 36, 87],
+          name: 'Yellow',
+          one: [251, 205, 32],
+          two: [255, 93,119],
         },
         {
           name: 'Pink Sunset',
@@ -275,14 +285,19 @@ export default {
           two: [17, 36, 94],
         },
         {
-          name: 'Yellow',
-          one: [251, 205, 32],
-          two: [255, 93,119],
+          name: 'Clouds',
+          one: [255, 255, 255],
+          two: [145, 207, 248],
         },
         {
           name: 'Sepia',
           one: [255, 239, 179],
           two: [41, 9, 0],
+        },
+        {
+          name: 'Seafoam',
+          one: [172, 212, 157],
+          two: [96, 36, 87],
         },
         {
           name: 'Fire Engine',
@@ -295,16 +310,6 @@ export default {
           two: [80, 98, 214],
         },
         {
-          name: 'Blueberry',
-          one: [1, 219, 254],
-          two: [127, 1, 211],
-        },
-        {
-          name: 'Spotify',
-          one: [106, 255, 127],
-          two: [0, 0, 126],
-        },
-        {
           name: 'Purple Light',
           one: [222, 252, 254],
           two: [134, 130, 217],
@@ -314,10 +319,11 @@ export default {
           one: [253, 217, 226],
           two: [101, 183, 214],
         },
+        
         {
-          name: 'Clouds',
-          one: [255, 255, 255],
-          two: [145, 207, 248],
+          name: 'Forrest',
+          one: [1, 171, 109],
+          two: [36, 26, 95],
         },
         {
           name: 'Western',
@@ -328,13 +334,7 @@ export default {
           name: 'Ivy League',
           one: [223, 178, 51],
           two: [47, 7, 129],
-        },
-        {
-          name: 'Gryffindor',
-          one: [248, 190, 61],
-          two: [104, 34, 24],
         }
-
       ]
     }
   },
@@ -1054,10 +1054,6 @@ export default {
     text-align:center;
     padding-top:2px;
     transition:background-color .64s ease;
-
-    &.download {
-      display:none;
-    }
     
     .fa{
       pointer-events: none;
@@ -1073,6 +1069,15 @@ export default {
 
     .fa-twitter{
       transform: scaleY(1.1);
+    }
+
+    &.download {
+      display:inline-block;
+
+      img{
+        width:24px;
+        height:24px;
+      }
     }
   }
 }
