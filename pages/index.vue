@@ -59,11 +59,11 @@
             </div>
             <div class="swatch custom" :class="{'is-selected': customSelected}" @click.stop="selectCustom()">
               <div class="colors">
-                <div class="color one" :style="{'background-color': toHex(customColorOne)}" @click="toggleCustom('one')">
-                  <!-- <span class="edit" >{{showCustom === 'one' ? 'close X' : 'edit'}}</span> -->
+                <div class="color one" :class="{'editing': showCustom === 'one'}" :style="{'background-color': toHex(customColorOne)}" @click="toggleCustom('one')">
+                  <span class="edit" ><i v-if="showCustom === 'one'" class="fa fa-times-circle"  /><i v-else class="fa fa-pencil" /></span>
                 </div>
-                <div class="color two" :style="{'background-color': toHex(customColorTwo)}" @click="toggleCustom('two')">
-                  <!-- <span class="edit" >{{showCustom === 'two' ? 'close X' : 'edit'}}</span> -->
+                <div class="color two" :class="{'editing': showCustom === 'two'}" :style="{'background-color': toHex(customColorTwo)}" @click="toggleCustom('two')">
+                  <span class="edit" ><i v-if="showCustom === 'two'" class="fa fa-times-circle" /><i v-else class="fa fa-pencil" /></span>
                 </div>
               </div>
               <p>Custom</p>
@@ -793,11 +793,13 @@ export default {
         z-index:2;
       }
 
-    &.is-selected .color .edit{
+    &.is-selected .color:hover .edit,
+    &.is-selected .color.editing .edit{
       display:block;
-      font-size:.8em;
-      opacity:.7;
-      transform: translateY(-50%) ;
+      font-size:1.2em;
+      text-align:center;
+      opacity:.6;
+      transform: translateY(-50%) rotate(-45deg)  ;
       position:absolute;
       top:50%;
       left:0;
