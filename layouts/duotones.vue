@@ -18,7 +18,7 @@ export default {
       { property: 'og:image:height', content: '630' }
     ],
     link: [
-      { rel: 'canonical', href: 'https://medialoot.com/duotones'}
+      { rel: 'canonical', href: 'https://medialoot.com/duotones/'}
     ]
   },
   data () {
